@@ -1,0 +1,355 @@
+[
+    {
+        "id": "3e39a99fd2ad8949",
+        "type": "tab",
+        "label": "KY-020-Anaid",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "48a8f3fbb654563b",
+        "type": "mqtt in",
+        "z": "3e39a99fd2ad8949",
+        "name": "",
+        "topic": "utng/alm/ky-020",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "411a2a5deb793088",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 220,
+        "y": 280,
+        "wires": [
+            [
+                "09e360bf7f03997b",
+                "ef191da7ef674c97"
+            ]
+        ]
+    },
+    {
+        "id": "1ff3bfbfadf13a29",
+        "type": "mqtt out",
+        "z": "3e39a99fd2ad8949",
+        "name": "",
+        "topic": "utng/alm/ky-020",
+        "qos": "2",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "bf0803e82877e801",
+        "x": 600,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "09e360bf7f03997b",
+        "type": "debug",
+        "z": "3e39a99fd2ad8949",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 790,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "ef7aeed998670def",
+        "type": "inject",
+        "z": "3e39a99fd2ad8949",
+        "name": "temp",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "true",
+        "payloadType": "bool",
+        "x": 270,
+        "y": 380,
+        "wires": [
+            [
+                "0e133485f0c5f299"
+            ]
+        ]
+    },
+    {
+        "id": "0e133485f0c5f299",
+        "type": "function",
+        "z": "3e39a99fd2ad8949",
+        "name": "",
+        "func": "global.set(\"switch\", !global.get(\"switch\"));\nmsg.payload=global.get(\"switch\");\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is started.\nglobal.set(\"switch\", false);",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 380,
+        "wires": [
+            [
+                "1ff3bfbfadf13a29"
+            ]
+        ]
+    },
+    {
+        "id": "32eebe1bebe18e68",
+        "type": "ui_switch",
+        "z": "3e39a99fd2ad8949",
+        "name": "",
+        "label": "switch",
+        "tooltip": "",
+        "group": "e0e13c26c517ef67",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "topic",
+        "topicType": "msg",
+        "style": "",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "",
+        "offcolor": "",
+        "animate": false,
+        "className": "",
+        "x": 430,
+        "y": 460,
+        "wires": [
+            [
+                "1ff3bfbfadf13a29"
+            ]
+        ]
+    },
+    {
+        "id": "32e6a2daec3a9aaf",
+        "type": "ui_text",
+        "z": "3e39a99fd2ad8949",
+        "group": "e256bd3ec88d4578",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Laser Status:",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": "",
+        "color": "#000000",
+        "x": 670,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "ef191da7ef674c97",
+        "type": "function",
+        "z": "3e39a99fd2ad8949",
+        "name": "",
+        "func": "msg.payload = msg.payload==\"true\"?\"Circuito abierto\":\"Circuito cerrado\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 440,
+        "y": 200,
+        "wires": [
+            [
+                "32e6a2daec3a9aaf",
+                "a25fea7f50959c60"
+            ]
+        ]
+    },
+    {
+        "id": "186f4e42ad607930",
+        "type": "postgresql",
+        "z": "3e39a99fd2ad8949",
+        "name": "",
+        "query": "INSERT INTO sensor_details(sensor_id,user_id,value) VALUES(7,8, '{{msg.payload}}');",
+        "postgreSQLConfig": "bff11fc8ef4ecedf",
+        "split": false,
+        "rowsPerMsg": 1,
+        "outputs": 1,
+        "x": 750,
+        "y": 240,
+        "wires": [
+            [
+                "09e360bf7f03997b"
+            ]
+        ]
+    },
+    {
+        "id": "a25fea7f50959c60",
+        "type": "function",
+        "z": "3e39a99fd2ad8949",
+        "name": "",
+        "func": "msg.payload = msg.payload == 'Circuito abierto' ? 1.0 : 0.0;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 220,
+        "wires": [
+            [
+                "186f4e42ad607930"
+            ]
+        ]
+    },
+    {
+        "id": "411a2a5deb793088",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "192.168.239.135",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "bf0803e82877e801",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "192.168.239.135",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "e0e13c26c517ef67",
+        "type": "ui_group",
+        "name": "KY-019",
+        "tab": "ab6cc718d668e6eb",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "e256bd3ec88d4578",
+        "type": "ui_group",
+        "name": "KY-008",
+        "tab": "ee65ee48e6e2eb40",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "bff11fc8ef4ecedf",
+        "type": "postgreSQLConfig",
+        "name": "",
+        "host": "127.0.0.1",
+        "hostFieldType": "str",
+        "port": "5432",
+        "portFieldType": "num",
+        "database": "aiot",
+        "databaseFieldType": "str",
+        "ssl": "false",
+        "sslFieldType": "bool",
+        "applicationName": "",
+        "applicationNameType": "str",
+        "max": "10",
+        "maxFieldType": "num",
+        "idle": "1000",
+        "idleFieldType": "num",
+        "connectionTimeout": "10000",
+        "connectionTimeoutFieldType": "num",
+        "user": "postgres",
+        "userFieldType": "str",
+        "password": "1234",
+        "passwordFieldType": "str"
+    },
+    {
+        "id": "ab6cc718d668e6eb",
+        "type": "ui_tab",
+        "name": "Relay",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "ee65ee48e6e2eb40",
+        "type": "ui_tab",
+        "name": "Anaid Limas",
+        "icon": "dashboard",
+        "order": 7,
+        "disabled": false,
+        "hidden": false
+    }
+]
